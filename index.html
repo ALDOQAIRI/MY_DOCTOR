@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- إعدادات PWA وعنوان التابة -->
+    <title>Dr. Clinic System | النظام الطبي</title>
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/3063/3063176.png">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0e4d92">
+
+    <!-- الخطوط والأيقونات -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #0e4d92;
+            /* أزرق طبي داكن احترافي */
+            --primary-light: #4facfe;
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --text-dark: #1a202c;
+            --text-light: #718096;
+            --shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Tajawal', sans-serif;
+            outline: none;
+        }
+
+        body {
+            background: linear-gradient(rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)),
+                url('https://img.freepik.com/free-photo/blur-hospital_1203-7957.jpg?w=1380') no-repeat center center fixed;
+            background-size: cover;
+            min-height: 100vh;
+            color: var(--text-dark);
+            display: flex;
+            overflow: hidden;
+        }
+
+        /* --- Login Screen --- */
+        #login-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .login-box {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 50px 40px;
+            border-radius: 25px;
+            width: 90%;
+            max-width: 420px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+            border: 1px solid white;
+        }
+
+        .login-logo {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 20px;
+            object-fit: contain;
+        }
+
+        /* --- Main Layout --- */
+        .app-container {
+            display: flex;
+            width: 100%;
+            height: 100vh;
+            padding: 15px;
+            gap: 20px;
+            transition: 0.3s;
+        }
+
+        .sidebar {
+            width: 270px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow);
+            padding: 30px 15px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .main-content {
+            flex: 1;
+            background: rgba(248, 250, 252, 0.85);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow);
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        /* UI Elements */
+        .brand {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 40px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0 10px;
+        }
+
+        .nav-btn {
+            background: transparent;
+            border: none;
+            padding: 12px 20px;
+            text-align: right;
+            width: 100%;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-light);
+            border-radius: 12px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-btn:hover,
+        .nav-btn.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 5px 15px rgba(14, 77, 146, 0.2);
+        }
+
+        .glass-card {
+            background: white;
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.03);
+            margin-bottom: 20px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .input-glass {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e2e8f0;
+            background: #f8fafc;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: 0.3s;
+        }
+
+        .input-glass:focus {
+            background: #fff;
+            border-color: var(--primary);
+        }
+
+        .btn-glass {
+            background: var(--primary);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .btn-glass:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(14, 77, 146, 0.3);
+        }
+
+        /* Timeline & Table */
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 8px;
+        }
+
+        th {
+            text-align: right;
+            padding: 15px;
+            color: var(--text-light);
+            font-size: 14px;
+        }
+
+        td {
+            background: white;
+            padding: 15px;
+            font-weight: 600;
+            border: 1px solid #f1f1f1;
+        }
+
+        tr td:first-child {
+            border-radius: 0 10px 10px 0;
+            border-right: none;
+        }
+
+        tr td:last-child {
+            border-radius: 10px 0 0 10px;
+            border-left: none;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-right: 25px;
+            border-right: 3px solid #e2e8f0;
+            margin-bottom: 30px;
+        }
+
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            right: -8px;
+            top: 0;
+            width: 13px;
+            height: 13px;
+            background: var(--primary);
+            border-radius: 50%;
+            border: 3px solid white;
+        }
+
+        /* Utilities */
+        .hidden {
+            display: none !important;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+        }
+
+        .alert-box {
+            background: #fff3cd;
+            color: #856404;
+            padding: 10px 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            body {
+                overflow: auto;
+                height: auto;
+            }
+
+            .app-container {
+                flex-direction: column;
+                padding: 0;
+                gap: 0;
+            }
+
+            .sidebar {
+                position: fixed;
+                bottom: 0;
+                width: 100%;
+                height: 75px;
+                flex-direction: row;
+                justify-content: space-around;
+                padding: 10px;
+                border-radius: 20px 20px 0 0;
+                z-index: 1000;
+            }
+
+            .brand,
+            .logout-btn-text,
+            .menu-text {
+                display: none;
+            }
+
+            .nav-btn {
+                flex-direction: column;
+                font-size: 10px;
+                padding: 5px;
+                background: none !important;
+                color: #a0aec0;
+                gap: 5px;
+            }
+
+            .nav-btn.active {
+                color: var(--primary) !important;
+            }
+
+            .nav-btn i {
+                font-size: 22px;
+            }
+
+            .main-content {
+                margin-bottom: 80px;
+                border-radius: 0;
+            }
+
+            .grid-2,
+            .grid-3 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Print A4 Only */
+        @media print {
+            @page {
+                size: A4;
+                margin: 0;
+            }
+
+            body {
+                margin: 0;
+                padding: 0;
+                visibility: hidden;
+            }
+
+            #print-area {
+                display: block !important;
+                visibility: visible;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 210mm;
+                height: 296mm;
+                background: white;
+                color: black;
+                direction: rtl;
+                z-index: 999999;
+                padding: 15mm;
+                box-sizing: border-box;
+            }
+
+            #print-area * {
+                visibility: visible;
+            }
+
+            .no-print {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Login Screen -->
+    <section id="login-screen">
+        <div class="login-box">
+            <img src="https://cdn-icons-png.flaticon.com/512/3063/3063176.png" alt="Logo" class="login-logo">
+            <h2 style="color: var(--primary); margin-bottom: 10px;">نظام العيادة الذكي</h2>
+            <p style="color: #777; margin-bottom: 30px;">يرجى تسجيل الدخول</p>
+
+            <form onsubmit="handleLogin(event)" autocomplete="off">
+                <div style="margin-bottom: 20px;">
+                    <input type="email" id="email" class="input-glass" placeholder="البريد الإلكتروني" required
+                        autocomplete="off">
+                </div>
+                <div style="margin-bottom: 25px;">
+                    <input type="password" id="password" class="input-glass" placeholder="كلمة المرور" required
+                        autocomplete="new-password">
+                </div>
+                <button type="submit" class="btn-glass"
+                    style="width: 100%; justify-content: center; box-shadow: 0 10px 20px rgba(14, 77, 146, 0.2);">دخول
+                    آمن <i class="fas fa-lock"></i></button>
+                <p id="login-error" style="color: red; margin-top: 15px; font-size: 14px;"></p>
+            </form>
+        </div>
+        <p style="margin-top: 20px; color: white; font-size: 12px; opacity: 0.8;">Secure System v2.1 Pro</p>
+    </section>
+
+    <!-- App Body -->
+    <div id="app-body" class="app-container hidden">
+        <nav class="sidebar">
+            <div class="brand">
+                <i class="fas fa-user-md fa-lg"></i> Dr. Clinic Pro
+            </div>
+            <button class="nav-btn active" onclick="navTo('dashboard')"><i class="fas fa-chart-pie"></i> <span
+                    class="menu-text">الرئيسية</span></button>
+            <button class="nav-btn" onclick="navTo('add-patient')"><i class="fas fa-user-plus"></i> <span
+                    class="menu-text">إضافة مريض</span></button>
+            <button class="nav-btn" onclick="navTo('search-patient')"><i class="fas fa-search"></i> <span
+                    class="menu-text">بحث وملفات</span></button>
+            <button class="nav-btn" onclick="navTo('settings')"><i class="fas fa-cog"></i> <span
+                    class="menu-text">الإعدادات</span></button>
+
+            <div style="margin-top: auto;">
+                <button class="nav-btn" onclick="handleLogout()" style="color: #e53e3e;">
+                    <i class="fas fa-sign-out-alt"></i> <span class="logout-btn-text menu-text">خروج</span>
+                </button>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <!-- Dashboard -->
+            <section id="dashboard">
+                <div style="margin-bottom: 25px;">
+                    <h1>لوحة المعلومات</h1>
+                </div>
+                <div class="grid-3">
+                    <div class="glass-card" style="border-right: 4px solid var(--primary);">
+                        <h4 style="color:var(--text-light)">إجمالي المرضى</h4>
+                        <h1 id="count-patients" style="font-size: 2.5rem; margin-top: 10px;">...</h1>
+                    </div>
+                    <div class="glass-card" style="border-right: 4px solid #28a745;">
+                        <h4 style="color:var(--text-light)">حالات اليوم</h4>
+                        <h1 id="count-today" style="font-size: 2.5rem; margin-top: 10px;">0</h1>
+                    </div>
+                    <div class="glass-card" style="border-right: 4px solid #d69e2e;">
+                        <h4 style="color:var(--text-light)">إيرادات اليوم</h4>
+                        <h1 style="font-size: 2.5rem; margin-top: 10px;"><span id="revenue-today">0</span> <span
+                                style="font-size:16px">ج.م</span></h1>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Settings -->
+            <section id="settings" class="hidden">
+                <h1>إعدادات العيادة</h1>
+                <p style="color:#777; margin-bottom:20px">تحكم في بيانات الروشتة</p>
+                <div class="glass-card">
+                    <form onsubmit="saveSettings(event)">
+                        <div class="grid-2">
+                            <div style="margin-bottom:15px"><label>اسم الطبيب (في الروشتة)</label><input type="text"
+                                    id="sDrName" class="input-glass" placeholder="د. محمد أحمد"></div>
+                            <div style="margin-bottom:15px"><label>التخصص</label><input type="text" id="sSpec"
+                                    class="input-glass" placeholder="استشاري الباطنة"></div>
+                        </div>
+                        <div style="margin-bottom:15px"><label>عنوان العيادة ورقم الهاتف</label><input type="text"
+                                id="sAddress" class="input-glass"></div>
+                        <button type="submit" class="btn-glass"><i class="fas fa-save"></i> حفظ الإعدادات</button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Add Patient -->
+            <section id="add-patient" class="hidden">
+                <h1>مريض جديد</h1>
+                <div class="glass-card" style="margin-top: 20px;">
+                    <form onsubmit="handleAddPatient(event)">
+                        <div class="grid-2">
+                            <div style="margin-bottom:15px"><label>الاسم</label><input type="text" id="pName"
+                                    class="input-glass" required></div>
+                            <div style="margin-bottom:15px"><label>الهاتف</label><input type="tel" id="pPhone"
+                                    class="input-glass" required></div>
+                        </div>
+                        <div class="grid-2">
+                            <div style="margin-bottom:15px"><label>السن</label><input type="number" id="pAge"
+                                    class="input-glass"></div>
+                            <div style="margin-bottom:15px"><label>الجنس</label><select id="pGender"
+                                    class="input-glass">
+                                    <option>ذكر</option>
+                                    <option>أنثى</option>
+                                </select></div>
+                        </div>
+                        <div style="margin-bottom:15px"><label>تنبيهات طبية</label><textarea id="pNotes"
+                                class="input-glass" rows="2"></textarea></div>
+                        <button type="submit" class="btn-glass"><i class="fas fa-save"></i> تسجيل</button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Search & File -->
+            <section id="search-patient" class="hidden">
+                <h1>الملفات الطبية</h1>
+                <input type="text" id="searchInput" class="input-glass" placeholder="بحث..."
+                    onkeyup="handleSearch(this.value)" style="border-radius: 50px; padding: 15px 25px; margin: 20px 0;">
+
+                <div id="results-area" class="glass-card hidden">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>الاسم</th>
+                                <th>الهاتف</th>
+                                <th>عرض</th>
+                            </tr>
+                        </thead>
+                        <tbody id="search-tbody"></tbody>
+                    </table>
+                </div>
+
+                <!-- Patient File -->
+                <div id="patient-file" class="hidden" style="margin-top: 20px;">
+                    <div class="glass-card"
+                        style="background: rgba(255,255,255,0.95); border-top: 5px solid var(--primary);">
+                        <div style="display:flex; justify-content:space-between;">
+                            <div>
+                                <h2 id="file-name" style="color:var(--primary);"></h2>
+                                <p id="file-info" style="color:var(--text-light);"></p>
+                                <div id="file-notes-box" class="alert-box hidden"><i
+                                        class="fas fa-exclamation-circle"></i> <span id="file-notes-text"></span></div>
+                            </div>
+                            <button onclick="document.getElementById('patient-file').classList.add('hidden')"
+                                class="btn-glass" style="background:#718096; height: 40px;">إغلاق</button>
+                        </div>
+                        <hr style="margin: 20px 0; border-top: 1px solid #eee;">
+
+                        <button onclick="document.getElementById('visit-form').classList.toggle('hidden')"
+                            class="btn-glass" style="width:100%;"><i class="fas fa-plus-circle"></i> زيارة
+                            جديدة</button>
+
+                        <div id="visit-form" class="hidden"
+                            style="background:#f8fafc; padding:20px; border-radius:15px; margin-top:20px; border:2px solid #e2e8f0;">
+                            <div class="grid-2">
+                                <div><label>التاريخ</label><input type="date" id="vDate" class="input-glass"></div>
+                                <div><label>سعر الكشف (ج.م)</label><input type="number" id="vFees" class="input-glass"
+                                        value="0"></div>
+                            </div>
+                            <div style="margin-top:10px"><label>التشخيص</label><input type="text" id="vDiag"
+                                    class="input-glass"></div>
+                            <div style="margin-top:10px">
+                                <label>العلاج</label>
+                                <input type="text" id="vRx" class="input-glass" list="med-list"
+                                    placeholder="اكتب اسم الدواء...">
+                                <datalist id="med-list">
+                                    <option value="Panadol 500mg - 1x3">
+                                    <option value="Augmentin 1g - 1x2">
+                                    <option value="Cataflam 50mg - sos">
+                                </datalist>
+                            </div>
+
+                            <button onclick="saveVisit()" class="btn-glass"
+                                style="background:#28a745; margin-top:15px; width:100%;">حفظ وطباعة</button>
+                            <div id="loader-visit" style="display:none; text-align:center; margin-top:10px;"><i
+                                    class="fas fa-spinner fa-spin"></i> جاري الحفظ...</div>
+                        </div>
+                    </div>
+
+                    <h3 style="margin: 20px 0;">السجل الطبي</h3>
+                    <div id="visits-timeline"></div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Print Area -->
+    <div id="print-area"></div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs, query, where, orderBy, serverTimestamp, setDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut, setPersistence, browserSessionPersistence } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+
+        // === استبدل هذا الجزء ببياناتك ===
+        const firebaseConfig = {
+            apiKey: "AIzaSyApCblfSAicnGuPF7f9vzk-s7S_xs8YUAk",
+            authDomain: "doctor-7a78e.firebaseapp.com",
+            databaseURL: "https://doctor-7a78e-default-rtdb.firebaseio.com",
+            projectId: "doctor-7a78e",
+            storageBucket: "doctor-7a78e.firebasestorage.app",
+            messagingSenderId: "763976542352",
+            appId: "1:763976542352:web:ca154f65b1524fa675d015",
+            measurementId: "G-E2JTJCC5ZG"
+        };
+        // ================================
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        // Security: Session Only
+        setPersistence(auth, browserSessionPersistence);
+
+        let allPatients = [];
+        let currentPatientId = null;
+        let currentPatientName = "";
+        let clinicSettings = { drName: "د. اسم الطبيب", spec: "التخصص", address: "العنوان" };
+
+        // --- Auth ---
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                document.getElementById('login-screen').classList.add('hidden');
+                document.getElementById('app-body').classList.remove('hidden');
+                loadSettings();
+                fetchData();
+            } else {
+                document.getElementById('login-screen').classList.remove('hidden');
+                document.getElementById('app-body').classList.add('hidden');
+                document.getElementById('password').value = "";
+            }
+        });
+
+        window.handleLogin = (e) => {
+            e.preventDefault();
+            signInWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('password').value)
+                .catch(() => document.getElementById('login-error').innerText = "بيانات الدخول غير صحيحة");
+        };
+
+        window.handleLogout = () => signOut(auth);
+
+        // --- Settings Logic ---
+        async function loadSettings() {
+            try {
+                const docSnap = await getDoc(doc(db, "settings", "clinicInfo"));
+                if (docSnap.exists()) {
+                    clinicSettings = docSnap.data();
+                    document.getElementById('sDrName').value = clinicSettings.drName || "";
+                    document.getElementById('sSpec').value = clinicSettings.spec || "";
+                    document.getElementById('sAddress').value = clinicSettings.address || "";
+                }
+            } catch (e) { console.log("No settings found"); }
+        }
+
+        window.saveSettings = async (e) => {
+            e.preventDefault();
+            const data = {
+                drName: document.getElementById('sDrName').value,
+                spec: document.getElementById('sSpec').value,
+                address: document.getElementById('sAddress').value
+            };
+            await setDoc(doc(db, "settings", "clinicInfo"), data);
+            clinicSettings = data;
+            alert("تم حفظ الإعدادات");
+        };
+
+        // --- Data & Revenue ---
+        async function fetchData() {
+            document.getElementById('vDate').valueAsDate = new Date();
+            const q = query(collection(db, "patients"), orderBy("name"));
+            const snapshot = await getDocs(q);
+            allPatients = [];
+            snapshot.forEach((doc) => allPatients.push({ id: doc.id, ...doc.data() }));
+            document.getElementById('count-patients').innerText = allPatients.length;
+
+            try {
+                const todayStr = new Date().toISOString().split('T')[0];
+                const qToday = query(collection(db, "visits"), where("date", "==", todayStr));
+                const snapToday = await getDocs(qToday);
+                document.getElementById('count-today').innerText = snapToday.size;
+
+                let totalRev = 0;
+                snapToday.forEach(doc => {
+                    const fees = parseFloat(doc.data().fees) || 0;
+                    totalRev += fees;
+                });
+                document.getElementById('revenue-today').innerText = totalRev;
+
+            } catch (e) { console.log("Needs Index for date"); }
+        }
+
+        window.handleAddPatient = async (e) => {
+            e.preventDefault();
+            await addDoc(collection(db, "patients"), {
+                name: document.getElementById('pName').value,
+                phone: document.getElementById('pPhone').value,
+                age: document.getElementById('pAge').value,
+                gender: document.getElementById('pGender').value,
+                notes: document.getElementById('pNotes').value,
+                createdAt: serverTimestamp()
+            });
+            alert("تم الحفظ"); e.target.reset(); fetchData();
+        };
+
+        window.handleSearch = (val) => {
+            if (val.length < 2) { document.getElementById('results-area').classList.add('hidden'); return; }
+            const tbody = document.getElementById('search-tbody'); tbody.innerHTML = '';
+            const res = allPatients.filter(p => p.name.includes(val) || p.phone.includes(val));
+            if (res.length > 0) {
+                document.getElementById('results-area').classList.remove('hidden');
+                res.forEach(p => {
+                    tbody.innerHTML += `<tr><td>${p.name}</td><td>${p.phone}</td><td><button class="btn-glass" onclick="openFile('${p.id}')">فتح</button></td></tr>`;
+                });
+            }
+        };
+
+        window.openFile = (id) => {
+            currentPatientId = id;
+            const p = allPatients.find(x => x.id === id);
+            currentPatientName = p.name;
+            document.getElementById('file-name').innerText = p.name;
+            document.getElementById('file-info').innerText = `${p.gender} | ${p.age} سنة | ${p.phone}`;
+
+            const notesBox = document.getElementById('file-notes-box');
+            if (p.notes && p.notes.trim()) {
+                notesBox.classList.remove('hidden');
+                document.getElementById('file-notes-text').innerText = p.notes;
+            } else notesBox.classList.add('hidden');
+
+            document.getElementById('results-area').classList.add('hidden');
+            document.getElementById('patient-file').classList.remove('hidden');
+            loadVisits(id);
+        };
+
+        async function loadVisits(pid) {
+            const tl = document.getElementById('visits-timeline'); tl.innerHTML = '<div style="text-align:center"><i class="fas fa-spinner fa-spin"></i> تحميل...</div>';
+            const q = query(collection(db, "visits"), where("patientId", "==", pid), orderBy("date", "desc"));
+            const snap = await getDocs(q);
+            tl.innerHTML = '';
+            if (snap.empty) { tl.innerHTML = '<p align="center" style="color:#aaa">لا توجد زيارات</p>'; return; }
+
+            snap.forEach(doc => {
+                const d = doc.data();
+                const waUrl = `https://wa.me/?text=${encodeURIComponent('عيادة ' + clinicSettings.drName + '\nالاسم: ' + currentPatientName + '\nالعلاج:\n' + d.treatment)}`;
+
+                tl.innerHTML += `
+                    <div class="timeline-item glass-card" style="padding:15px; margin-bottom:15px">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px">
+                            <div>
+                                <strong style="color:var(--primary); font-size:18px">${d.date}</strong>
+                                <span style="background:#edf2f7; color:#4a5568; padding:3px 8px; border-radius:5px; font-size:12px; margin-right:5px">كشف: ${d.fees || 0} ج.م</span>
+                            </div>
+                            <div style="display:flex; gap:10px">
+                                <a href="${waUrl}" target="_blank" style="color:#25D366; font-size:20px"><i class="fab fa-whatsapp"></i></a>
+                                <button onclick="printRx('${d.diagnosis}', '${d.treatment}', '${d.date}')" style="background:none; border:none; cursor:pointer; color:var(--primary); font-size:18px"><i class="fas fa-print"></i></button>
+                            </div>
+                        </div>
+                        <p style="margin-bottom:5px"><strong>التشخيص:</strong> ${d.diagnosis}</p>
+                        <p style="white-space:pre-line; color:#4a5568"><strong>Rx:</strong> ${d.treatment}</p>
+                    </div>`;
+            });
+        }
+
+        window.saveVisit = async () => {
+            const loader = document.getElementById('loader-visit');
+            loader.style.display = 'block';
+
+            try {
+                // حفظ الزيارة بدون صور
+                const data = {
+                    patientId: currentPatientId,
+                    date: document.getElementById('vDate').value,
+                    fees: document.getElementById('vFees').value,
+                    diagnosis: document.getElementById('vDiag').value,
+                    treatment: document.getElementById('vRx').value,
+                    createdAt: serverTimestamp()
+                };
+
+                await addDoc(collection(db, "visits"), data);
+
+                if (data.date === new Date().toISOString().split('T')[0]) {
+                    const revEl = document.getElementById('revenue-today');
+                    revEl.innerText = parseFloat(revEl.innerText) + parseFloat(data.fees);
+                    const cntEl = document.getElementById('count-today');
+                    cntEl.innerText = parseInt(cntEl.innerText) + 1;
+                }
+
+                printRx(data.diagnosis, data.treatment, data.date);
+
+                document.getElementById('visit-form').classList.add('hidden');
+                document.getElementById('vRx').value = '';
+                loadVisits(currentPatientId);
+            } catch (err) {
+                console.error(err);
+                alert("حدث خطأ في الحفظ");
+            } finally { loader.style.display = 'none'; }
+        };
+
+        // Rx Print Function (Left-to-Right for English)
+        window.printRx = (diag, rx, date) => {
+            const printArea = document.getElementById('print-area');
+            printArea.innerHTML = `
+                <div style="display:flex; flex-direction:column; height:100%; border:2px solid #333; padding:20px; font-family:'Tajawal'">
+                    
+                    <!-- Header (RTL) -->
+                    <div style="text-align:center; border-bottom:2px solid #333; padding-bottom:15px; margin-bottom:20px; direction: rtl;">
+                        <h1 style="margin:0; font-size:28px">${clinicSettings.drName}</h1>
+                        <p style="margin:5px 0; font-size:16px; color:#555">${clinicSettings.spec}</p>
+                        <p style="margin:0; font-size:14px">${clinicSettings.address}</p>
+                    </div>
+
+                    <!-- Patient Info (RTL) -->
+                    <div style="display:flex; justify-content:space-between; margin-bottom:20px; font-size:18px; font-weight:bold; direction: rtl;">
+                        <span>الاسم: ${currentPatientName}</span>
+                        <span>التاريخ: ${date}</span>
+                    </div>
+
+                    <!-- Body (LTR for English) -->
+                    <div style="flex:1; direction: ltr; text-align: left;"> 
+                        <div style="margin-bottom:15px; border-bottom: 1px dashed #ccc; padding-bottom: 10px;">
+                            <span style="font-weight:bold; font-size: 18px;">Diagnosis:</span> 
+                            <span style="font-size: 18px; margin-left: 10px;">${diag}</span>
+                        </div>
+
+                        <h2 style="font-family: serif; font-size: 40px; margin-bottom: 10px; font-style: italic;">Rx</h2>
+                        <div style="font-size: 22px; line-height: 1.6; white-space: pre-line; padding-left: 10px; font-family: sans-serif;">
+                            ${rx}
+                        </div>
+                    </div>
+
+                    <!-- Footer (RTL) -->
+                    <div style="text-align:center; border-top:1px solid #ccc; padding-top:15px; margin-top:10px; direction: rtl;">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                            <p style="font-style:italic; font-size: 14px;">مع تمنياتنا بالشفاء العاجل</p>
+                            <div style="text-align: center;">
+                                <p style="margin-bottom: 15px;">توقيع الطبيب</p>
+                                <p>__________________</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            setTimeout(() => window.print(), 200);
+        };
+
+        window.navTo = (id) => {
+            document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
+            document.getElementById(id).classList.remove('hidden');
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+        }
+    </script>
+</body>
+
+</html>
