@@ -577,7 +577,7 @@
         async function fetchDashboardData() {
             document.getElementById('vDate').valueAsDate = new Date();
 
-            // 1. Waiting List (Real-time listener is better, but simple fetch here)
+            // 1. Waiting List
             const qWait = query(collection(db, "waiting_list"), orderBy("arrivedAt", "asc"));
             const snapWait = await getDocs(qWait);
             waitingList = [];
@@ -586,15 +586,28 @@
             snapWait.forEach(doc => {
                 waitingList.push({ id: doc.id, ...doc.data() });
                 const d = doc.data();
+                
+                // تحديد لون العلامة حسب النوع
+                const badgeColor = d.type === 'استشارة' ? '#28a745' : '#0e4d92';
+                const badgeIcon = d.type === 'استشارة' ? 'fa-comments' : 'fa-user-md';
+
                 document.getElementById('waiting-list-container').innerHTML += `
                     <div class="queue-card">
-                        <div><strong>${d.name}</strong> <span style="font-size:12px; color:#777">(${d.type})</span></div>
-                        <button onclick="removeFromQueue('${doc.id}')" class="btn-glass" style="background:#e53e3e; padding:5px 10px; font-size:12px;">دخل</button>
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            <!-- العلامة الملونة -->
+                            <span style="background:${badgeColor}; color:white; padding:5px 10px; border-radius:15px; font-size:12px; min-width:80px; text-align:center;">
+                                <i class="fas ${badgeIcon}"></i> ${d.type}
+                            </span>
+                            <strong style="font-size:16px;">${d.name}</strong> 
+                        </div>
+                        <button onclick="removeFromQueue('${doc.id}')" class="btn-glass" style="background:#e53e3e; padding:5px 15px; font-size:12px;">
+                            <i class="fas fa-times"></i> دخل
+                        </button>
                     </div>`;
             });
             document.getElementById('waiting-count').innerText = waitingList.length;
 
-            // 2. Today's Done Cases
+            // 2. Today's Stats (باقي الكود كما هو)
             const todayStr = new Date().toISOString().split('T')[0];
             const qVisits = query(collection(db, "visits"), where("date", "==", todayStr));
             const snapVisits = await getDocs(qVisits);
@@ -606,7 +619,7 @@
         }
 
         // --- Secretary Functions ---
-        window.handleSecSearch = (val) => {
+       window.handleSecSearch = (val) => {
             if (val.length < 2) { document.getElementById('sec-results').classList.add('hidden'); return; }
             const res = allPatients.filter(p => p.name.includes(val) || p.phone.includes(val) || (p.fileId && p.fileId.includes(val)));
             const container = document.getElementById('sec-results');
@@ -615,25 +628,36 @@
             if (res.length > 0) {
                 container.classList.remove('hidden');
                 res.forEach(p => {
-                    // Logic to suggest visit type
+                    // منطق الاقتراح (للمساعدة فقط)
                     let suggestion = "كشف";
-                    let diffDays = "لا يوجد زيارات";
+                    let diffInfo = "زيارة جديدة";
                     if (p.lastVisitDate) {
                         const last = new Date(p.lastVisitDate);
                         const today = new Date();
                         const diffTime = Math.abs(today - last);
                         const diff = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                        diffDays = `منذ ${diff} يوم`;
-                        if (diff <= 14) suggestion = "استشارة"; // Logic: Less than 14 days = Follow up
+                        diffInfo = `منذ ${diff} يوم`;
+                        if (diff <= 14) suggestion = "استشارة"; 
                     }
 
                     container.innerHTML += `
-                        <div style="border-bottom:1px solid #eee; padding:10px; display:flex; justify-content:space-between; align-items:center;">
-                            <div>
-                                <strong>${p.name}</strong> <span style="font-size:12px; color:#555">(${p.fileId || '-'})</span><br>
-                                <span style="font-size:12px; color:${suggestion === 'استشارة' ? 'green' : 'blue'}">آخر زيارة: ${diffDays} -> مقترح: <b>${suggestion}</b></span>
+                        <div style="border-bottom:1px solid #eee; padding:15px; display:flex; flex-direction:column; gap:10px;">
+                            <div style="display:flex; justify-content:space-between;">
+                                <div>
+                                    <strong style="font-size:18px">${p.name}</strong> <span style="color:#777">(${p.fileId || '-'})</span>
+                                    <br><span style="font-size:12px; color:#555">آخر زيارة: ${diffInfo} (المقترح: ${suggestion})</span>
+                                </div>
                             </div>
-                            <button onclick="addToQueue('${p.id}', '${p.name}', '${suggestion}')" class="btn-glass" style="font-size:12px;">حجز دور (${suggestion})</button>
+                            
+                            <!-- أزرار الحجز المنفصلة -->
+                            <div style="display:flex; gap:10px;">
+                                <button onclick="addToQueue('${p.id}', '${p.name}', 'كشف')" class="btn-glass" style="background:var(--primary); flex:1; font-size:14px;">
+                                    <i class="fas fa-user-md"></i> حجز كشف
+                                </button>
+                                <button onclick="addToQueue('${p.id}', '${p.name}', 'استشارة')" class="btn-glass" style="background:#28a745; flex:1; font-size:14px;">
+                                    <i class="fas fa-comments"></i> حجز استشارة
+                                </button>
+                            </div>
                         </div>
                     `;
                 });
