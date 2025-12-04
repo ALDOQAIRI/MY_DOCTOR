@@ -1,9 +1,9 @@
 {
   "name": "Dr. Clinic Pro",
   "short_name": "Clinic",
-  "start_url": "index.html",
+  "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#ffffff",
+  "background_color": "#0e4d92",
   "theme_color": "#0e4d92",
   "icons": [
     {
