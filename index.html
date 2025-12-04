@@ -9,145 +9,137 @@
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0e4d92">
 
+    <!-- الخطوط -->
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         :root {
             --primary: #0e4d92;
-            /* تعديل الشفافية: جعلناها شبه معدومة (0.05) */
-            --glass-bg: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.2);
-            --text-dark: #000; /* النص أسود ليكون واضحاً فوق الخلفية */
-            --shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            --glass-bg: rgba(255, 255, 255, 0.15); 
+            --glass-card: rgba(255, 255, 255, 0.65);
+            --border-glass: 1px solid rgba(255, 255, 255, 0.4);
+            --text-main: #000;
+            --whatsapp: #25D366;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tajawal', sans-serif; outline: none; }
 
         body {
-            background-color: #0e4d92;
-            background-image: url('https://img.freepik.com/free-photo/blur-hospital_1203-7957.jpg?w=1380');
-            background-repeat: no-repeat;
-            background-position: center center;
-            background-attachment: fixed;
+            background: url('https://img.freepik.com/free-photo/blur-hospital_1203-7957.jpg?w=1380') no-repeat center center fixed;
             background-size: cover;
             min-height: 100vh;
-            color: var(--text-dark);
+            color: var(--text-main);
             display: flex;
             overflow: hidden;
         }
 
-        /* إزالة الطبقة الرمادية لتظهر الألوان الطبيعية للصورة */
-        body::before { display: none; }
+        /* إخفاء منطقة الطباعة في الوضع العادي */
+        #print-area { display: none; }
 
-        /* Login */
+        /* --- Login Screen --- */
         #login-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            /* خلفية شفافة تماماً */
-            background: rgba(0, 0, 0, 0.2); 
-            backdrop-filter: blur(5px); /* تمويه خفيف جداً */
+            background: rgba(0, 0, 0, 0.3); backdrop-filter: blur(8px);
             z-index: 99999; display: flex; justify-content: center; align-items: center; flex-direction: column;
             transition: opacity 0.5s ease;
         }
 
         .login-box {
-            /* زجاج نقي */
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-            padding: 40px; border-radius: 25px; width: 90%; max-width: 400px; text-align: center;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(20px);
+            padding: 50px 40px; border-radius: 20px; width: 90%; max-width: 420px; text-align: center;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2); border: var(--border-glass);
         }
 
-        /* Layout */
+        /* --- Layout --- */
         .app-container { display: flex; width: 100%; height: 100vh; padding: 15px; gap: 20px; transition: 0.3s; }
 
         .sidebar {
-            width: 270px;
-            /* شفافية عالية جداً (0.05) والتمويه قليل (5px) لتظهر الخلفية */
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
-            border-radius: 20px; border: 1px solid var(--glass-border);
-            box-shadow: var(--shadow); padding: 30px 15px; display: flex; flex-direction: column;
+            width: 270px; background: var(--glass-bg); backdrop-filter: blur(20px);
+            border-radius: 16px; padding: 30px 15px; 
+            display: flex; flex-direction: column; border: var(--border-glass);
         }
 
         .main-content {
-            flex: 1;
-            /* شفافية عالية جداً */
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
-            border-radius: 20px; border: 1px solid var(--glass-border);
-            box-shadow: var(--shadow); padding: 30px; overflow-y: auto;
+            flex: 1; background: var(--glass-bg); backdrop-filter: blur(20px);
+            border-radius: 16px; padding: 30px; overflow-y: auto;
+            border: var(--border-glass);
         }
 
-        /* UI */
-        .brand { font-size: 22px; font-weight: 800; color: #002244; margin-bottom: 30px; display: flex; align-items: center; gap: 10px; text-shadow: 0 0 10px rgba(255,255,255,0.8); }
+        .brand { 
+            font-size: 22px; font-weight: 800; color: var(--primary); 
+            margin-bottom: 30px; display: flex; align-items: center; gap: 10px; 
+            padding: 0 10px; border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 20px;
+        }
         
         .nav-btn {
             background: transparent; border: none; padding: 12px 20px; text-align: right; width: 100%;
-            font-size: 16px; font-weight: 700; color: #000; border-radius: 12px; margin-bottom: 8px;
-            cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 12px;
-            text-shadow: 0 0 5px rgba(255,255,255,0.5); /* ظل خفيف للنص ليظهر بوضوح */
+            font-size: 16px; font-weight: 700; color: #333; border-radius: 10px; margin-bottom: 5px;
+            cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 12px;
         }
-        .nav-btn:hover, .nav-btn.active { 
-            background: rgba(14, 77, 146, 0.7); /* لون أزرق نصف شفاف عند الضغط */
-            color: white; 
-            text-shadow: none;
-        }
+        .nav-btn:hover { background: rgba(255,255,255,0.4); color: var(--primary); }
+        .nav-btn.active { background: var(--primary); color: white; box-shadow: 0 4px 10px rgba(14, 77, 146, 0.3); }
         
         .glass-card {
-            /* البطاقات شفافة جداً */
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(8px);
-            padding: 20px; border-radius: 16px; margin-bottom: 20px; border: 1px solid rgba(255, 255, 255, 0.2);
+            background: var(--glass-card); backdrop-filter: blur(10px);
+            padding: 20px; border-radius: 12px; margin-bottom: 20px; border: var(--border-glass);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
         }
 
         .input-glass {
-            width: 100%; padding: 10px 15px; border: 1px solid rgba(255,255,255,0.5);
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 10px; font-size: 16px; font-weight: 600; color: #000;
+            width: 100%; padding: 12px 15px; border: 1px solid rgba(255,255,255,0.5);
+            background: rgba(255, 255, 255, 0.5); border-radius: 8px; 
+            font-size: 16px; font-weight: 600; color: #000; transition: 0.2s;
         }
-        .input-glass:focus { background: rgba(255,255,255,0.6); border-color: var(--primary); }
-        .input-glass::placeholder { color: #333; }
+        .input-glass:focus { background: rgba(255,255,255,0.9); border-color: var(--primary); }
 
         .btn-glass {
-            background: var(--primary); color: white; padding: 10px 25px; border: none;
-            border-radius: 10px; font-weight: 700; cursor: pointer; transition: 0.3s;
+            background: var(--primary); color: white; padding: 12px 25px; border: none;
+            border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.2s;
             display: inline-flex; align-items: center; gap: 8px; justify-content: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
+        .btn-glass:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
 
-        /* Queue & Role Specific */
-        .role-badge { 
-            font-size: 12px; padding: 4px 10px; border-radius: 20px; 
-            background: #2d3748; color: white; display: inline-block; margin-top: 5px; 
-        }
         .queue-card {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 10px; border-bottom: 1px solid rgba(0,0,0,0.1); 
-            background: rgba(255,255,255,0.1); /* خلفية خفيفة جداً */
-            margin-bottom: 5px; border-radius: 8px;
+            padding: 15px; background: rgba(255,255,255,0.6);
+            margin-bottom: 8px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.3);
+            transition: 0.2s;
         }
+        .queue-card:hover { transform: scale(1.01); background: rgba(255,255,255,0.9); }
 
         .hidden { display: none !important; }
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
 
-        /* Print */
+        /* --- Print Styles (The Fix) --- */
         @media print {
-            @page { size: A4; margin: 0; }
-            body { margin: 0; visibility: hidden; }
-            #print-area { display: block !important; visibility: visible; position: absolute; top: 0; left: 0; width: 210mm; min-height: 296mm; background: white; color: black; padding: 15mm; z-index: 999999; }
-            #print-area * { visibility: visible; }
+            body * { visibility: hidden; } /* إخفاء كل شيء */
+            #print-area, #print-area * { 
+                visibility: visible; 
+                display: block !important; 
+            }
+            #print-area {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                margin: 0;
+                padding: 20px;
+                background: white;
+                color: black;
+                z-index: 999999;
+            }
+            /* إخفاء التطبيق نفسه أثناء الطباعة */
+            .app-container, #login-screen { display: none; }
         }
 
-        /* Mobile */
         @media (max-width: 768px) {
             .app-container { flex-direction: column; padding: 0; }
-            .sidebar { position: fixed; bottom: 0; width: 100%; height: 70px; flex-direction: row; z-index: 1000; padding: 10px; background: rgba(255,255,255,0.8); backdrop-filter: blur(10px); }
+            .sidebar { position: fixed; bottom: 0; width: 100%; height: 75px; flex-direction: row; z-index: 1000; padding: 10px; background: rgba(255,255,255,0.9); border-radius: 20px 20px 0 0; }
             .brand, .menu-text { display: none; }
-            .nav-btn { flex-direction: column; font-size: 10px; padding: 5px; gap: 2px; }
-            .main-content { margin-bottom: 70px; }
+            .nav-btn { flex-direction: column; font-size: 10px; padding: 5px; gap: 4px; justify-content: center; margin: 0; }
+            .main-content { margin-bottom: 75px; border-radius: 0; }
             .grid-2, .grid-3 { grid-template-columns: 1fr; }
         }
     </style>
@@ -158,12 +150,13 @@
     <!-- Login -->
     <section id="login-screen">
         <div class="login-box">
-            <h2 style="color: var(--primary);">نظام العيادة</h2>
+            <i class="fas fa-user-md fa-3x" style="color: var(--primary); margin-bottom: 20px;"></i>
+            <h2 style="color: var(--primary);">نظام العيادة الذكي</h2>
             <form onsubmit="handleLogin(event)" autocomplete="off">
-                <input type="email" id="email" class="input-glass" placeholder="البريد الإلكتروني" required style="margin:20px 0 10px;">
-                <input type="password" id="password" class="input-glass" placeholder="كلمة المرور" required style="margin-bottom:20px;">
-                <button type="submit" class="btn-glass" style="width: 100%;">دخول</button>
-                <p id="login-error" style="color: red; margin-top: 10px;"></p>
+                <input type="email" id="email" class="input-glass" placeholder="البريد الإلكتروني" required style="margin-bottom: 15px;">
+                <input type="password" id="password" class="input-glass" placeholder="كلمة المرور" required style="margin-bottom: 25px;">
+                <button type="submit" class="btn-glass" style="width: 100%;">تسجيل الدخول</button>
+                <p id="login-error" style="color: #ef4444; margin-top: 15px; font-weight: bold;"></p>
             </form>
         </div>
     </section>
@@ -172,145 +165,145 @@
     <div id="app-body" class="app-container hidden">
         <nav class="sidebar">
             <div class="brand">
-                <div>
-                    <i class="fas fa-hospital-user"></i> Clinic
-                    <div id="user-role-display" class="role-badge"></div>
-                </div>
+                <div><i class="fas fa-clinic-medical"></i> Clinic Pro</div>
             </div>
             
-            <!-- Doctor Menu -->
             <div id="doctor-menu" class="hidden">
-                <button class="nav-btn active" onclick="navTo('dashboard')"><i class="fas fa-home"></i> <span class="menu-text">الرئيسية</span></button>
-                <button class="nav-btn" onclick="navTo('add-patient')"><i class="fas fa-user-plus"></i> <span class="menu-text">مريض جديد</span></button>
-                <button class="nav-btn" onclick="navTo('search-patient')"><i class="fas fa-folder-open"></i> <span class="menu-text">الملفات</span></button>
-                <button class="nav-btn" onclick="navTo('settings')"><i class="fas fa-cog"></i> <span class="menu-text">إعدادات</span></button>
+                <button class="nav-btn active" onclick="navTo('dashboard')"><i class="fas fa-th-large"></i> <span class="menu-text">غرفة الطبيب</span></button>
+                <button class="nav-btn" onclick="navTo('add-patient')"><i class="fas fa-user-plus"></i> <span class="menu-text">إضافة مريض</span></button>
+                <button class="nav-btn" onclick="navTo('search-patient')"><i class="fas fa-file-medical-alt"></i> <span class="menu-text">سجل المرضى</span></button>
+                <button class="nav-btn" onclick="navTo('settings')"><i class="fas fa-sliders-h"></i> <span class="menu-text">الإعدادات</span></button>
             </div>
 
-            <!-- Secretary Menu -->
             <div id="secretary-menu" class="hidden">
-                <button class="nav-btn active" onclick="navTo('sec-search')"><i class="fas fa-calendar-check"></i> <span class="menu-text">حجز ومتابعة</span></button>
+                <button class="nav-btn active" onclick="navTo('sec-search')"><i class="fas fa-calendar-check"></i> <span class="menu-text">الاستقبال</span></button>
                 <button class="nav-btn" onclick="navTo('add-patient')"><i class="fas fa-user-plus"></i> <span class="menu-text">تسجيل جديد</span></button>
             </div>
             
             <div style="margin-top: auto;">
-                <button class="nav-btn" onclick="handleLogout()" style="color: #e53e3e;"><i class="fas fa-sign-out-alt"></i> <span class="menu-text">خروج</span></button>
+                <button class="nav-btn" onclick="handleLogout()" style="color: #e53e3e; background: rgba(255,0,0,0.1);"><i class="fas fa-sign-out-alt"></i> <span class="menu-text">خروج</span></button>
             </div>
         </nav>
 
         <main class="main-content">
             
-            <!-- 1. Doctor Dashboard (Real-time) -->
+            <!-- 1. لوحة الطبيب -->
             <section id="dashboard" class="hidden">
-                <h1>لوحة التحكم</h1>
-                <div class="grid-3" style="margin-top: 20px;">
-                    <div class="glass-card" style="border-right: 4px solid #d69e2e;">
-                        <h4><i class="fas fa-users"></i> في الانتظار</h4>
-                        <h1 id="waiting-count" style="font-size: 3rem; color: #d69e2e;">0</h1>
-                        <p style="font-size: 12px;">تحديث لحظي <i class="fas fa-circle" style="color:#28a745; font-size:8px;"></i></p>
+                <h1>غرفة الطبيب</h1>
+                <div class="grid-3">
+                    <div class="glass-card" style="border-right: 5px solid #f59e0b;">
+                        <h4><i class="fas fa-chair"></i> في الانتظار</h4>
+                        <h1 id="waiting-count" style="font-size: 3rem; color: #f59e0b;">0</h1>
                     </div>
-                    <div class="glass-card" style="border-right: 4px solid var(--primary);">
+                    <div class="glass-card" style="border-right: 5px solid #10b981;">
                         <h4>حالات اليوم</h4>
-                        <h1 id="count-today" style="font-size: 3rem;">0</h1>
+                        <h1 id="count-today" style="font-size: 3rem; color: #10b981;">0</h1>
                     </div>
-                    <div class="glass-card" style="border-right: 4px solid #28a745;">
+                    <div class="glass-card" style="border-right: 5px solid #3b82f6;">
                         <h4>الإيرادات</h4>
-                        <h1 id="revenue-today" style="font-size: 3rem;">0</h1>
+                        <h1 id="revenue-today" style="font-size: 3rem; color: #3b82f6;">0</h1>
+                        <span style="color:var(--text-main); font-size:14px">ج.م</span>
                     </div>
                 </div>
 
                 <div class="glass-card">
-                    <h3><i class="fas fa-list-ol"></i> قائمة الانتظار الحالية</h3>
-                    <div id="waiting-list-container" style="margin-top: 15px;">
-                        <p style="text-align:center;">جاري الاتصال...</p>
+                    <h3><i class="fas fa-list"></i> قائمة الانتظار الحالية</h3>
+                    <div id="waiting-list-container">
+                        <p style="text-align:center; padding: 20px;">جاري الاتصال...</p>
                     </div>
                 </div>
             </section>
 
-            <!-- 2. Secretary Search & Queue -->
+            <!-- 2. الاستقبال -->
             <section id="sec-search" class="hidden">
-                <h1>استقبال وحجز دور</h1>
-                <input type="text" class="input-glass" placeholder="بحث بالاسم أو الهاتف..." onkeyup="handleSecSearch(this.value)" style="margin: 20px 0;">
-                
+                <h1>الاستقبال والحجز</h1>
+                <div class="glass-card">
+                    <input type="text" class="input-glass" placeholder="بحث بالاسم أو الهاتف..." onkeyup="handleSecSearch(this.value)" style="padding: 15px;">
+                </div>
                 <div id="sec-results" class="glass-card hidden"></div>
             </section>
 
-            <!-- 3. Add Patient -->
+            <!-- 3. إضافة مريض -->
             <section id="add-patient" class="hidden">
-                <h1>تسجيل مريض جديد</h1>
-                <div class="glass-card" style="margin-top: 20px;">
+                <h1>مريض جديد</h1>
+                <div class="glass-card">
                     <form onsubmit="handleAddPatient(event)">
                         <div class="grid-2">
                             <div><label>الاسم</label><input type="text" id="pName" class="input-glass" required></div>
                             <div><label>الهاتف</label><input type="tel" id="pPhone" class="input-glass" required></div>
                         </div>
-                        <div class="grid-3" style="margin-top: 15px;">
+                        <div class="grid-3" style="margin-top: 20px;">
                             <div><label>السن</label><input type="number" id="pAge" class="input-glass"></div>
                             <div><label>الجنس</label><select id="pGender" class="input-glass"><option>ذكر</option><option>أنثى</option></select></div>
-                            <div><label>رقم الملف</label><input type="text" id="pFileID" class="input-glass" readonly style="background: rgba(0,0,0,0.1);"></div>
+                            <div><label>رقم الملف</label><input type="text" id="pFileID" class="input-glass" readonly style="background: rgba(255,255,255,0.3);"></div>
                         </div>
-                        <div style="margin-top: 15px;"><label>تنبيهات طبية</label><textarea id="pNotes" class="input-glass" rows="2"></textarea></div>
-                        <button type="submit" class="btn-glass" style="margin-top: 20px;">حفظ البيانات</button>
+                        <div style="margin-top: 20px;"><label>ملاحظات طبية</label><textarea id="pNotes" class="input-glass" rows="2"></textarea></div>
+                        <button type="submit" class="btn-glass" style="margin-top: 25px; width: 100%;">حفظ البيانات</button>
                     </form>
                 </div>
             </section>
 
-            <!-- 4. Doctor Search & File -->
-            <section id="search-patient" class="hidden">
-                <h1>ملفات المرضى</h1>
-                <input type="text" class="input-glass" placeholder="بحث..." onkeyup="handleDocSearch(this.value)" style="margin: 20px 0;">
-                <div id="doc-results" class="glass-card hidden"></div>
-
-                <!-- Patient File View -->
-                <div id="patient-file" class="hidden" style="margin-top: 20px;">
-                    <div class="glass-card" style="border-top: 5px solid var(--primary);">
-                        <div style="display:flex; justify-content:space-between;">
-                            <div>
-                                <h2 id="file-name" style="color:var(--primary);"></h2>
-                                <p id="file-id" style="font-weight:bold; color:#555"></p>
-                                <p id="file-info" style="color:#777"></p>
-                                <div id="file-notes-box" class="hidden" style="background:#fff3cd; color:#856404; padding:5px 10px; border-radius:5px; margin-top:5px;"></div>
-                            </div>
-                            <button onclick="closeFile()" class="btn-glass" style="background:#718096; height:40px;">إغلاق</button>
+            <!-- 4. شاشة الكشف -->
+            <section id="patient-exam-screen" class="hidden">
+                <button onclick="cancelExam()" class="btn-glass" style="background:#64748b; margin-bottom:15px;"><i class="fas fa-arrow-right"></i> عودة للقائمة</button>
+                
+                <div class="glass-card" style="border-top: 5px solid var(--primary);">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <div>
+                            <h2 id="exam-p-name" style="margin:0; color:var(--primary)">اسم المريض</h2>
+                            <p id="exam-p-info" style="color:var(--text-main); margin-top:5px; font-weight: bold;"></p>
                         </div>
-                        
-                        <hr style="margin: 15px 0; border-top: 1px solid rgba(0,0,0,0.1);">
-                        
-                        <button onclick="toggleVisitForm()" class="btn-glass" style="width:100%;">كشف / زيارة جديدة</button>
-                        
-                        <div id="visit-form" class="hidden" style="background:rgba(255,255,255,0.4); padding:20px; border-radius:15px; margin-top:15px; border:2px solid #fff;">
-                            <div class="grid-2">
-                                <div><label>التاريخ</label><input type="date" id="vDate" class="input-glass"></div>
-                                <div>
-                                    <label>نوع الزيارة</label>
-                                    <select id="vType" class="input-glass" style="background: rgba(255,255,255,0.8);">
-                                        <option value="كشف">كشف</option>
-                                        <option value="استشارة">استشارة</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="grid-2" style="margin-top:10px">
-                                <div><label>السعر</label><input type="number" id="vFees" class="input-glass" value="0"></div>
-                                <div><label>التشخيص</label><input type="text" id="vDiag" class="input-glass"></div>
-                            </div>
-                            
-                            <div style="margin-top:10px">
-                                <label>العلاج (Rx)</label>
-                                <textarea id="vRx" class="input-glass" rows="6" placeholder="اكتب العلاج هنا..."></textarea>
-                            </div>
-
-                            <div style="display:flex; gap:10px; margin-top:15px;">
-                                <button onclick="saveVisit()" class="btn-glass" style="background:#28a745; flex:1;">حفظ فقط</button>
-                                <button onclick="saveVisit(true)" class="btn-glass" style="background:#0e4d92; flex:1;">حفظ وطباعة</button>
-                            </div>
+                        <div id="exam-p-notes" class="hidden" style="background:#fff3cd; color:#856404; padding:10px; border-radius:8px;"></div>
+                    </div>
+                    <hr style="margin:20px 0; border:0; border-top:1px solid rgba(0,0,0,0.1);">
+                    
+                    <div class="grid-2">
+                        <div>
+                            <label>نوع الزيارة</label>
+                            <input type="text" id="vTypeDisplay" class="input-glass" readonly style="background:rgba(0,0,0,0.05); font-weight:bold;">
                         </div>
+                        <div><label>التاريخ</label><input type="date" id="vDate" class="input-glass"></div>
+                    </div>
+                    
+                    <div style="margin-top:15px">
+                        <label>التشخيص (Diagnosis)</label>
+                        <input type="text" id="vDiag" class="input-glass" placeholder="التشخيص المبدئي...">
+                    </div>
+                    <div style="margin-top:15px">
+                        <label>العلاج (Rx)</label>
+                        <textarea id="vRx" class="input-glass" rows="8" placeholder="اكتب الأدوية والجرعات..."></textarea>
                     </div>
 
-                    <h3 style="margin: 20px 0;">السجل الطبي</h3>
-                    <div id="visits-timeline"></div>
+                    <!-- الأزرار المعدلة -->
+                    <div style="display:flex; gap:10px; margin-top:25px;">
+                        <button onclick="printOnly()" class="btn-glass" style="background:#0e4d92; flex:1; padding:15px; font-size:14px;">
+                            <i class="fas fa-print"></i> طباعة (PDF) فقط
+                        </button>
+                        <button onclick="waOnly()" class="btn-glass" style="background:#25D366; flex:1; padding:15px; font-size:14px;">
+                            <i class="fab fa-whatsapp"></i> إرسال واتساب فقط
+                        </button>
+                        <button onclick="finishExam()" class="btn-glass" style="background:#28a745; flex:1; padding:15px; font-size:14px;">
+                            <i class="fas fa-check-circle"></i> إنهاء الكشف (حفظ وخروج)
+                        </button>
+                    </div>
+                </div>
+
+                <div class="glass-card">
+                    <h3>التاريخ المرضي السابق</h3>
+                    <div id="exam-history"></div>
                 </div>
             </section>
-            
-            <!-- Settings -->
+
+            <!-- 5. البحث العادي -->
+            <section id="search-patient" class="hidden">
+                <h1>سجل المرضى</h1>
+                <div class="glass-card">
+                    <input type="text" class="input-glass" placeholder="بحث..." onkeyup="handleDocSearch(this.value)">
+                </div>
+                <div id="doc-results" class="glass-card hidden"></div>
+            </section>
+
+            <!-- الإعدادات -->
             <section id="settings" class="hidden">
                 <h1>الإعدادات</h1>
                 <div class="glass-card">
@@ -319,8 +312,8 @@
                             <div><label>اسم الطبيب</label><input type="text" id="sDrName" class="input-glass"></div>
                             <div><label>التخصص</label><input type="text" id="sSpec" class="input-glass"></div>
                         </div>
-                        <div style="margin-top:10px"><label>العنوان</label><input type="text" id="sAddress" class="input-glass"></div>
-                        <button type="submit" class="btn-glass" style="margin-top:15px">حفظ</button>
+                        <div style="margin-top:15px"><label>العنوان</label><input type="text" id="sAddress" class="input-glass"></div>
+                        <button type="submit" class="btn-glass" style="margin-top:20px">حفظ</button>
                     </form>
                 </div>
             </section>
@@ -328,7 +321,7 @@
         </main>
     </div>
 
-    <!-- Print Area -->
+    <!-- Print Area (Hidden) -->
     <div id="print-area"></div>
 
     <!-- Firebase Logic -->
@@ -337,7 +330,6 @@
         import { getFirestore, collection, addDoc, getDocs, query, where, orderBy, serverTimestamp, setDoc, doc, getDoc, deleteDoc, updateDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
         import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut, setPersistence, browserSessionPersistence } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
 
-        // === إعدادات فيرباس ===
         const firebaseConfig = {
             apiKey: "AIzaSyApCblfSAicnGuPF7f9vzk-s7S_xs8YUAk",
             authDomain: "doctor-7a78e.firebaseapp.com",
@@ -357,29 +349,30 @@
         let currentUserRole = 'doctor';
         let allPatients = [];
         let clinicSettings = { drName: "د. طبيب", spec: "", address: "" };
-        let currentPatientId = null;
-        let currentPatientName = "";
+        
+        let activePatientId = null;
+        let activePatientName = "";
+        let activePatientPhone = "";
+        let activeQueueId = null;
+        let activeVisitFees = 0;
 
-        // --- Auth & Role Logic ---
+        // --- Auth ---
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 document.getElementById('login-screen').classList.add('hidden');
                 document.getElementById('app-body').classList.remove('hidden');
-
                 if (user.email.startsWith('dr')) {
                     currentUserRole = 'doctor';
                     document.getElementById('doctor-menu').classList.remove('hidden');
-                    document.getElementById('user-role-display').innerText = 'طبيب (Admin)';
                     navTo('dashboard');
                     loadSettings();
-                    initRealTimeDashboard(); // تشغيل التحديث اللحظي
+                    initRealTimeDashboard();
                 } else {
                     currentUserRole = 'secretary';
                     document.getElementById('secretary-menu').classList.remove('hidden');
-                    document.getElementById('user-role-display').innerText = 'سكرتارية';
                     navTo('sec-search');
                 }
-                fetchAllPatients(); 
+                fetchAllPatients();
             } else {
                 document.getElementById('login-screen').classList.remove('hidden');
                 document.getElementById('app-body').classList.add('hidden');
@@ -389,11 +382,10 @@
         window.handleLogin = (e) => {
             e.preventDefault();
             signInWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('password').value)
-                .catch(err => document.getElementById('login-error').innerText = "خطأ في الدخول");
+                .catch(err => document.getElementById('login-error').innerText = "خطأ في البيانات");
         };
         window.handleLogout = () => signOut(auth);
 
-        // --- Data Fetching ---
         async function fetchAllPatients() {
             const q = query(collection(db, "patients"), orderBy("name"));
             const snap = await getDocs(q);
@@ -401,90 +393,215 @@
             snap.forEach(doc => allPatients.push({ id: doc.id, ...doc.data() }));
         }
 
-        // --- Real-time Dashboard (New Feature) ---
+        // --- Dashboard ---
         function initRealTimeDashboard() {
             document.getElementById('vDate').valueAsDate = new Date();
-
-            // 1. مراقبة لحظية لقائمة الانتظار (onSnapshot)
             const qWait = query(collection(db, "waiting_list"), orderBy("arrivedAt", "asc"));
             
-            // هذا الكود يعمل تلقائياً عند أي تغيير في قاعدة البيانات
             onSnapshot(qWait, (snapshot) => {
-                const waitingList = [];
                 const container = document.getElementById('waiting-list-container');
                 container.innerHTML = '';
-
-                if(snapshot.empty) {
-                    container.innerHTML = '<p style="text-align:center; color:#555;">لا يوجد مرضى في الانتظار</p>';
-                }
-
+                if(snapshot.empty) container.innerHTML = '<p style="text-align:center;">لا يوجد مرضى في الانتظار</p>';
+                
                 snapshot.forEach(doc => {
                     const d = doc.data();
-                    const badgeColor = d.type === 'استشارة' ? '#28a745' : '#0e4d92';
-                    const badgeIcon = d.type === 'استشارة' ? 'fa-comments' : 'fa-user-md';
-
+                    const badgeColor = d.type === 'استشارة' ? '#10b981' : '#0e4d92';
                     container.innerHTML += `
                         <div class="queue-card">
-                            <div style="display:flex; align-items:center; gap:10px;">
-                                <span style="background:${badgeColor}; color:white; padding:5px 10px; border-radius:15px; font-size:12px; min-width:80px; text-align:center;">
-                                    <i class="fas ${badgeIcon}"></i> ${d.type}
-                                </span>
-                                <strong style="font-size:16px;">${d.name}</strong> 
+                            <div style="display:flex; align-items:center; gap:15px;">
+                                <span style="background:${badgeColor}; color:white; padding:5px 12px; border-radius:15px; font-size:12px;">${d.type}</span>
+                                <div><strong style="font-size:18px; color:#000;">${d.name}</strong></div>
                             </div>
-                            <button onclick="removeFromQueue('${doc.id}')" class="btn-glass" style="background:#e53e3e; padding:5px 15px; font-size:12px;">
-                                <i class="fas fa-times"></i> دخل
+                            <button onclick="startExam('${doc.id}', '${d.patientId}', '${d.type}', '${d.fees}')" class="btn-glass" style="background:#0e4d92; font-size:14px;">
+                                <i class="fas fa-stethoscope"></i> ابدأ الكشف
                             </button>
                         </div>`;
                 });
                 document.getElementById('waiting-count').innerText = snapshot.size;
             });
-
-            // تحديث الإيرادات والعدد (يمكن تركه كـ fetch عادي لتقليل استهلاك الداتا)
             fetchStats();
         }
 
-        async function fetchStats() {
-            const todayStr = new Date().toISOString().split('T')[0];
-            const qVisits = query(collection(db, "visits"), where("date", "==", todayStr));
-            const snapVisits = await getDocs(qVisits);
-            document.getElementById('count-today').innerText = snapVisits.size;
-            let totalRev = 0;
-            snapVisits.forEach(d => totalRev += parseFloat(d.data().fees || 0));
-            document.getElementById('revenue-today').innerText = totalRev;
+        // --- Start Exam ---
+        window.startExam = async (queueId, patientId, type, fees) => {
+            activeQueueId = queueId;
+            activePatientId = patientId;
+            activeVisitFees = Number(fees) || 0; 
+
+            let p = allPatients.find(x => x.id === patientId);
+            if (!p) {
+                const docSnap = await getDoc(doc(db, "patients", patientId));
+                if (docSnap.exists()) p = { id: docSnap.id, ...docSnap.data() };
+            }
+
+            if (!p) return alert("خطأ: بيانات المريض غير موجودة");
+
+            activePatientName = p.name;
+            activePatientPhone = p.phone;
+            document.getElementById('exam-p-name').innerText = p.name;
+            document.getElementById('exam-p-info').innerText = `${p.gender} | ${p.age} سنة | ${p.phone}`;
+            
+            const notesDiv = document.getElementById('exam-p-notes');
+            if (p.notes) {
+                notesDiv.innerText = "⚠️ " + p.notes;
+                notesDiv.classList.remove('hidden');
+            } else notesDiv.classList.add('hidden');
+
+            document.getElementById('vDiag').value = '';
+            document.getElementById('vRx').value = '';
+            document.getElementById('vTypeDisplay').value = type;
+
+            navTo('patient-exam-screen');
+            loadHistory(patientId);
+        };
+
+        async function loadHistory(pid) {
+            const container = document.getElementById('exam-history');
+            container.innerHTML = 'جاري التحميل...';
+            const q = query(collection(db, "visits"), where("patientId", "==", pid), orderBy("date", "desc"));
+            const snap = await getDocs(q);
+            container.innerHTML = '';
+            if(snap.empty) { container.innerHTML = '<p>لا يوجد زيارات سابقة</p>'; return; }
+
+            snap.forEach(doc => {
+                const d = doc.data();
+                container.innerHTML += `
+                    <div class="glass-card" style="padding:15px; margin-bottom:10px;">
+                        <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+                            <strong>${d.date} <span style="font-size:12px; background:#eee; padding:2px 5px; border-radius:4px;">${d.type}</span></strong>
+                        </div>
+                        <div style="color:#333;">Dx: ${d.diagnosis}</div>
+                        <div style="white-space:pre-wrap; font-family:sans-serif; margin-top:5px;">${d.treatment}</div>
+                    </div>`;
+            });
         }
 
-        // --- Secretary Functions ---
+        // --- أزرار العمليات (طباعة فقط - واتساب فقط - إنهاء) ---
+        
+        window.printOnly = () => {
+            const diag = document.getElementById('vDiag').value;
+            const rx = document.getElementById('vRx').value;
+            const date = document.getElementById('vDate').value;
+            printRx(diag, rx, date); // استدعاء الطباعة مباشرة
+        };
+
+        window.waOnly = () => {
+            const diag = document.getElementById('vDiag').value;
+            const rx = document.getElementById('vRx').value;
+            const date = document.getElementById('vDate').value;
+            
+            const waMessage = 
+`*🏥 عيادة ${clinicSettings.drName}*
+*تخصص:* ${clinicSettings.spec}
+
+*👤 المريض:* ${activePatientName}
+*📅 التاريخ:* ${date}
+-----------------------
+*🩺 التشخيص:* ${diag}
+
+*💊 العلاج (Rx):*
+${rx}
+-----------------------
+*📍 العنوان:* ${clinicSettings.address}`;
+
+            const waLink = `https://wa.me/2${activePatientPhone}?text=${encodeURIComponent(waMessage)}`;
+            window.open(waLink, '_blank');
+        };
+
+        window.finishExam = async () => {
+            const btn = event.target;
+            btn.disabled = true;
+            btn.innerText = "جاري الحفظ...";
+
+            try {
+                const diag = document.getElementById('vDiag').value;
+                const rx = document.getElementById('vRx').value;
+                const today = new Date().toISOString().split('T')[0];
+                const type = document.getElementById('vTypeDisplay').value;
+
+                await addDoc(collection(db, "visits"), {
+                    patientId: activePatientId,
+                    date: today,
+                    type: type,
+                    fees: Number(activeVisitFees),
+                    diagnosis: diag,
+                    treatment: rx,
+                    createdAt: serverTimestamp()
+                });
+
+                await updateDoc(doc(db, "patients", activePatientId), { lastVisitDate: today });
+
+                if (activeQueueId) await deleteDoc(doc(db, "waiting_list", activeQueueId));
+
+                alert("تم إنهاء الكشف بنجاح");
+                navTo('dashboard');
+                fetchStats();
+
+            } catch (err) {
+                console.error(err);
+                alert("حدث خطأ");
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "إنهاء الكشف";
+            }
+        };
+
+        window.cancelExam = () => {
+            if(confirm("هل تريد العودة؟")) navTo('dashboard');
+        };
+
+        // --- Print Function ---
+        window.printRx = (diag, rx, date) => {
+            const printArea = document.getElementById('print-area');
+            printArea.innerHTML = `
+                <div style="display:flex; flex-direction:column; height:100%; border:2px solid #000; padding:30px; font-family:'Tajawal'">
+                    <div style="text-align:center; border-bottom:2px solid #000; padding-bottom:15px; margin-bottom:20px; direction: rtl;">
+                        <h1 style="margin:0;">${clinicSettings.drName}</h1>
+                        <p style="font-size:18px;">${clinicSettings.spec}</p>
+                        <p style="font-size:14px">${clinicSettings.address}</p>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; margin-bottom:30px; direction: rtl; font-weight:bold; font-size:18px;">
+                        <span>الاسم: ${activePatientName}</span>
+                        <span>التاريخ: ${date}</span>
+                    </div>
+                    <div style="flex:1; direction: ltr; text-align: left;"> 
+                        <div style="margin-bottom:20px;">
+                            <strong style="font-size:20px;">Dx:</strong> <span style="font-size:18px;">${diag}</span>
+                        </div>
+                        <h2 style="font-family:serif; font-style:italic; font-size:40px; margin-bottom:10px;">Rx</h2>
+                        <div style="font-size: 20px; line-height: 1.8; white-space: pre-wrap; padding-left: 20px; font-family: sans-serif;">${rx}</div>
+                    </div>
+                    <div style="text-align:center; border-top:1px solid #000; padding-top:15px; margin-top:10px; direction: rtl;">
+                        <p>مع تمنياتنا بالشفاء العاجل</p>
+                    </div>
+                </div>
+            `;
+            // تأخير بسيط للتأكد من تحميل المحتوى قبل فتح النافذة
+            setTimeout(() => window.print(), 300);
+        };
+
+        // --- Secretary ---
         window.handleSecSearch = (val) => {
             if (val.length < 2) { document.getElementById('sec-results').classList.add('hidden'); return; }
-            const res = allPatients.filter(p => p.name.includes(val) || p.phone.includes(val) || (p.fileId && p.fileId.includes(val)));
+            const res = allPatients.filter(p => p.name.includes(val) || p.phone.includes(val));
             const container = document.getElementById('sec-results');
             container.innerHTML = '';
-
             if (res.length > 0) {
                 container.classList.remove('hidden');
                 res.forEach(p => {
                     let suggestion = "كشف";
-                    let diffInfo = "زيارة جديدة";
                     if (p.lastVisitDate) {
-                        const last = new Date(p.lastVisitDate);
-                        const today = new Date();
-                        const diffTime = Math.abs(today - last);
-                        const diff = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                        diffInfo = `منذ ${diff} يوم`;
-                        if (diff <= 14) suggestion = "استشارة"; 
+                        const diff = Math.ceil(Math.abs(new Date() - new Date(p.lastVisitDate)) / (1000 * 60 * 60 * 24));
+                        if(diff <= 14) suggestion = "استشارة";
                     }
-
                     container.innerHTML += `
-                        <div style="border-bottom:1px solid #eee; padding:15px; display:flex; flex-direction:column; gap:10px;">
+                        <div style="border-bottom:1px solid #ccc; padding:10px; margin-bottom:10px;">
                             <div style="display:flex; justify-content:space-between;">
-                                <div>
-                                    <strong style="font-size:18px">${p.name}</strong> <span style="color:#777">(${p.fileId || '-'})</span>
-                                    <br><span style="font-size:12px; color:#555">آخر زيارة: ${diffInfo} (المقترح: ${suggestion})</span>
-                                </div>
+                                <b>${p.name}</b> <span style="font-size:12px; color:#555">(${suggestion})</span>
                             </div>
-                            <div style="display:flex; gap:10px;">
-                                <button onclick="addToQueue('${p.id}', '${p.name}', 'كشف')" class="btn-glass" style="background:var(--primary); flex:1; font-size:14px;"><i class="fas fa-user-md"></i> حجز كشف</button>
-                                <button onclick="addToQueue('${p.id}', '${p.name}', 'استشارة')" class="btn-glass" style="background:#28a745; flex:1; font-size:14px;"><i class="fas fa-comments"></i> حجز استشارة</button>
+                            <div style="margin-top:5px; display:flex; gap:10px;">
+                                <button onclick="addToQueue('${p.id}', '${p.name}', 'كشف')" class="btn-glass" style="background:var(--primary); font-size:12px; flex:1;">حجز كشف</button>
+                                <button onclick="addToQueue('${p.id}', '${p.name}', 'استشارة')" class="btn-glass" style="background:#10b981; font-size:12px; flex:1;">حجز استشارة</button>
                             </div>
                         </div>`;
                 });
@@ -492,21 +609,16 @@
         };
 
         window.addToQueue = async (pid, name, type) => {
-            if (confirm(`حجز دور للمريض: ${name} نوع: ${type}؟`)) {
-                await addDoc(collection(db, "waiting_list"), {
-                    patientId: pid, name: name, type: type, arrivedAt: serverTimestamp()
-                });
-                alert("تمت الإضافة لقائمة الانتظار");
-                document.getElementById('sec-results').classList.add('hidden');
-            }
+            const fees = prompt(`أدخل قيمة الفيزيتا لـ (${type}):`, "0");
+            if (fees === null) return; 
+
+            await addDoc(collection(db, "waiting_list"), {
+                patientId: pid, name: name, type: type, fees: Number(fees) || 0, arrivedAt: serverTimestamp()
+            });
+            alert("تم الحجز بنجاح");
+            document.getElementById('sec-results').classList.add('hidden');
         };
 
-        window.removeFromQueue = async (docId) => {
-            await deleteDoc(doc(db, "waiting_list", docId));
-            // لا حاجة لاستدعاء التحديث، onSnapshot سيقوم بذلك تلقائياً
-        };
-
-        // --- Patient & Visit Logic ---
         window.handleAddPatient = async (e) => {
             e.preventDefault();
             const randomId = "#" + Math.floor(10000 + Math.random() * 90000);
@@ -519,121 +631,20 @@
                 fileId: randomId,
                 createdAt: serverTimestamp()
             });
-            alert("تم التسجيل. رقم الملف: " + randomId);
+            alert("تم التسجيل: " + randomId);
             e.target.reset();
             fetchAllPatients();
         };
 
-        window.handleDocSearch = (val) => {
-            if (val.length < 2) { document.getElementById('doc-results').classList.add('hidden'); return; }
-            const res = allPatients.filter(p => p.name.includes(val) || (p.fileId && p.fileId.includes(val)));
-            const container = document.getElementById('doc-results');
-            container.innerHTML = '';
-            if (res.length > 0) {
-                container.classList.remove('hidden');
-                res.forEach(p => {
-                    container.innerHTML += `<div style="padding:10px; border-bottom:1px solid #eee; cursor:pointer" onclick="openFile('${p.id}')"><b>${p.name}</b> <span style="float:left">${p.fileId}</span></div>`;
-                });
-            }
-        };
-
-        window.openFile = (id) => {
-            currentPatientId = id;
-            const p = allPatients.find(x => x.id === id);
-            currentPatientName = p.name;
-            document.getElementById('file-name').innerText = p.name;
-            document.getElementById('file-id').innerText = p.fileId || "No ID";
-            document.getElementById('file-info').innerText = `${p.gender} | ${p.age} سنة | ${p.phone}`;
-
-            if (p.notes) {
-                document.getElementById('file-notes-box').innerText = "تنبيه: " + p.notes;
-                document.getElementById('file-notes-box').classList.remove('hidden');
-            } else {
-                document.getElementById('file-notes-box').classList.add('hidden');
-            }
-
-            document.getElementById('doc-results').classList.add('hidden');
-            document.getElementById('patient-file').classList.remove('hidden');
-            loadVisits(id);
-        };
-
-        window.toggleVisitForm = () => document.getElementById('visit-form').classList.toggle('hidden');
-        window.closeFile = () => document.getElementById('patient-file').classList.add('hidden');
-
-        async function loadVisits(pid) {
-            const tl = document.getElementById('visits-timeline');
-            tl.innerHTML = 'جاري التحميل...';
-            const q = query(collection(db, "visits"), where("patientId", "==", pid), orderBy("date", "desc"));
-            const snap = await getDocs(q);
-            tl.innerHTML = '';
-
-            snap.forEach(doc => {
-                const d = doc.data();
-                tl.innerHTML += `
-                    <div class="timeline-item">
-                        <div style="margin-bottom:5px">
-                            <strong>${d.date}</strong> <span style="background:#eee; padding:2px 8px; font-size:12px; border-radius:4px">${d.type}</span>
-                            <button onclick="printRx('${d.diagnosis}', \`${d.treatment}\`, '${d.date}')" style="background:none; border:none; color:var(--primary); cursor:pointer; float:left"><i class="fas fa-print"></i></button>
-                        </div>
-                        <p><strong>D:</strong> ${d.diagnosis}</p>
-                        <p style="white-space: pre-wrap; font-family:sans-serif;">${d.treatment}</p>
-                    </div><hr style="border:0; border-top:1px dashed #ccc; margin:10px 0;">`;
-            });
+        async function fetchStats() {
+            const todayStr = new Date().toISOString().split('T')[0];
+            const qVisits = query(collection(db, "visits"), where("date", "==", todayStr));
+            const snapVisits = await getDocs(qVisits);
+            document.getElementById('count-today').innerText = snapVisits.size;
+            let totalRev = 0;
+            snapVisits.forEach(d => totalRev += Number(d.data().fees) || 0);
+            document.getElementById('revenue-today').innerText = totalRev;
         }
-
-        window.saveVisit = async (shouldPrint = false) => {
-            const data = {
-                patientId: currentPatientId,
-                date: document.getElementById('vDate').value,
-                type: document.getElementById('vType').value,
-                fees: document.getElementById('vFees').value,
-                diagnosis: document.getElementById('vDiag').value,
-                treatment: document.getElementById('vRx').value, 
-                createdAt: serverTimestamp()
-            };
-
-            await addDoc(collection(db, "visits"), data);
-            await updateDoc(doc(db, "patients", currentPatientId), { lastVisitDate: data.date });
-
-            if (shouldPrint) {
-                printRx(data.diagnosis, data.treatment, data.date);
-            } else {
-                alert("تم الحفظ");
-            }
-
-            document.getElementById('visit-form').classList.add('hidden');
-            document.getElementById('vRx').value = '';
-            loadVisits(currentPatientId);
-            fetchStats(); // Update stats
-        };
-
-        window.printRx = (diag, rx, date) => {
-            const printArea = document.getElementById('print-area');
-            printArea.innerHTML = `
-                <div style="display:flex; flex-direction:column; height:100%; border:2px solid #333; padding:20px; font-family:'Tajawal'">
-                    <div style="text-align:center; border-bottom:2px solid #333; padding-bottom:15px; margin-bottom:20px; direction: rtl;">
-                        <h1 style="margin:0;">${clinicSettings.drName}</h1>
-                        <p>${clinicSettings.spec}</p>
-                        <p style="font-size:12px">${clinicSettings.address}</p>
-                    </div>
-                    <div style="display:flex; justify-content:space-between; margin-bottom:20px; direction: rtl; font-weight:bold;">
-                        <span>${currentPatientName}</span>
-                        <span>${date}</span>
-                    </div>
-                    <div style="flex:1; direction: ltr; text-align: left;"> 
-                        <div style="margin-bottom:15px;">
-                            <strong>Dx:</strong> ${diag}
-                        </div>
-                        <h2 style="font-family:serif; font-style:italic;">Rx</h2>
-                        <div style="font-size: 18px; line-height: 1.6; white-space: pre-wrap; padding-left: 10px; font-family: sans-serif;">${rx}</div>
-                    </div>
-                    <div style="text-align:center; border-top:1px solid #ccc; padding-top:15px; margin-top:10px; direction: rtl;">
-                        <p>تمنياتنا بالشفاء العاجل</p>
-                    </div>
-                </div>
-            `;
-            setTimeout(() => window.print(), 300);
-        };
 
         async function loadSettings() {
             try {
@@ -668,6 +679,19 @@
             } else {
                 const autoBtn = document.querySelector(`button[onclick*="'${id}'"]`);
                 if (autoBtn) autoBtn.classList.add('active');
+            }
+        };
+
+        window.handleDocSearch = (val) => {
+            if (val.length < 2) { document.getElementById('doc-results').classList.add('hidden'); return; }
+            const res = allPatients.filter(p => p.name.includes(val) || p.phone.includes(val));
+            const container = document.getElementById('doc-results');
+            container.innerHTML = '';
+            if (res.length > 0) {
+                container.classList.remove('hidden');
+                res.forEach(p => {
+                    container.innerHTML += `<div style="padding:10px; border-bottom:1px solid #ccc; cursor:pointer;" onclick="startExam(null, '${p.id}', 'كشف', 0)"><b>${p.name}</b> (عرض الملف)</div>`;
+                });
             }
         };
 
